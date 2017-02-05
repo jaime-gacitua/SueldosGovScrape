@@ -1,0 +1,5 @@
+http://www.gobiernotransparentechile.cl/directorio/entidad/1/1/per_contrata/Ao-2016,Error writing
+http://www.gobiernotransparentechile.cl/directorio/entidad/1/1/per_contrata/Ao-2016?x=0&y=0&page_number=4&sort=id&direction=asc,Error writing
+http://www.gobiernotransparentechile.cl/directorio/entidad/1/1/per_contrata/Ao-2016?x=0&y=0&page_number=5&sort=id&direction=asc,Error writing
+http://www.gobiernotransparentechile.cl/directorio/entidad/1/1/per_contrata/Ao-2016?x=0&y=0&page_number=6&sort=id&direction=asc,Error writing
+http://www.gobiernotransparentechile.cl/directorio/entidad/1/1/per_contrata/Ao-2016?x=0&y=0&page_number=7&sort=id&direction=asc,Error writing

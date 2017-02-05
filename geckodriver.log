@@ -160,3 +160,285 @@ JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jqu
 JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
 JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
 JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+1486326061689	geckodriver	INFO	Listening on 127.0.0.1:50053
+1486326063728	mozprofile::profile	INFO	Using profile path C:\Users\jgaci\AppData\Local\Temp\rust_mozprofile.XPjefD8Uf8mU
+1486326063734	geckodriver::marionette	INFO	Starting browser C:\Program Files (x86)\Mozilla Firefox\firefox.exe
+1486326063742	geckodriver::marionette	INFO	Connecting to Marionette on localhost:50059
+1486326064698	Marionette	INFO	Listening on port 50059
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+[Child 232] ###!!! ABORT: Aborting on channel error.: file c:/builds/moz2_slave/m-rel-w32-00000000000000000000/build/src/ipc/glue/MessageChannel.cpp, line 2056
+1486326263719	geckodriver	INFO	Listening on 127.0.0.1:60375
+1486326265739	mozprofile::profile	INFO	Using profile path C:\Users\jgaci\AppData\Local\Temp\rust_mozprofile.IARld1C16AKL
+1486326265746	geckodriver::marionette	INFO	Starting browser C:\Program Files (x86)\Mozilla Firefox\firefox.exe
+1486326265755	geckodriver::marionette	INFO	Connecting to Marionette on localhost:60381
+1486326266644	Marionette	INFO	Listening on port 60381
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+*************************
+A coding exception was thrown and uncaught in a Task.
+
+Full message: TypeError: this.browserForTab is undefined
+Full stack: hasRemotenessChange@chrome://marionette/content/browser.js:233:9
+executeWhenReady@chrome://marionette/content/browser.js:264:9
+GeckoDriver.prototype.sendAsync@chrome://marionette/content/driver.js:218:5
+send/<@chrome://marionette/content/proxy.js:138:7
+send@chrome://marionette/content/proxy.js:105:12
+ownPriorityGetterTrap.get/<@chrome://marionette/content/proxy.js:24:25
+GeckoDriver.prototype.getElementText@chrome://marionette/content/driver.js:1847:31
+TaskImpl_run@resource://gre/modules/Task.jsm:319:40
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+TaskImpl_handleResultValue@resource://gre/modules/Task.jsm:388:16
+TaskImpl_run@resource://gre/modules/Task.jsm:327:13
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+Dispatcher.prototype.execute@chrome://marionette/content/dispatcher.js:117:13
+Dispatcher.prototype.onPacket@chrome://marionette/content/dispatcher.js:88:5
+DebuggerTransport.prototype._onJSONObjectReady/<@chrome://marionette/content/server.js -> resource://devtools/shared/transport/transport.js:483:11
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+
+*************************
+*************************
+A coding exception was thrown and uncaught in a Task.
+
+Full message: TypeError: this.browserForTab is undefined
+Full stack: hasRemotenessChange@chrome://marionette/content/browser.js:233:9
+executeWhenReady@chrome://marionette/content/browser.js:264:9
+GeckoDriver.prototype.sendAsync@chrome://marionette/content/driver.js:218:5
+send/<@chrome://marionette/content/proxy.js:138:7
+send@chrome://marionette/content/proxy.js:105:12
+ownPriorityGetterTrap.get/<@chrome://marionette/content/proxy.js:24:25
+GeckoDriver.prototype.getElementText@chrome://marionette/content/driver.js:1847:31
+TaskImpl_run@resource://gre/modules/Task.jsm:319:40
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+TaskImpl_handleResultValue@resource://gre/modules/Task.jsm:388:16
+TaskImpl_run@resource://gre/modules/Task.jsm:327:13
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+Dispatcher.prototype.execute@chrome://marionette/content/dispatcher.js:117:13
+Dispatcher.prototype.onPacket@chrome://marionette/content/dispatcher.js:88:5
+DebuggerTransport.prototype._onJSONObjectReady/<@chrome://marionette/content/server.js -> resource://devtools/shared/transport/transport.js:483:11
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+
+*************************
+*************************
+A coding exception was thrown in a Promise rejection callback.
+See https://developer.mozilla.org/Mozilla/JavaScript_code_modules/Promise.jsm/Promise
+
+Full message: TypeError: this.browserForTab is undefined
+Full stack: hasRemotenessChange@chrome://marionette/content/browser.js:233:9
+executeWhenReady@chrome://marionette/content/browser.js:264:9
+GeckoDriver.prototype.sendAsync@chrome://marionette/content/driver.js:218:5
+send/<@chrome://marionette/content/proxy.js:138:7
+send@chrome://marionette/content/proxy.js:105:12
+ownPriorityGetterTrap.get/<@chrome://marionette/content/proxy.js:24:25
+GeckoDriver.prototype.getElementText@chrome://marionette/content/driver.js:1847:31
+TaskImpl_run@resource://gre/modules/Task.jsm:319:40
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+TaskImpl_handleResultValue@resource://gre/modules/Task.jsm:388:16
+TaskImpl_run@resource://gre/modules/Task.jsm:327:13
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+Dispatcher.prototype.execute@chrome://marionette/content/dispatcher.js:117:13
+Dispatcher.prototype.onPacket@chrome://marionette/content/dispatcher.js:88:5
+DebuggerTransport.prototype._onJSONObjectReady/<@chrome://marionette/content/server.js -> resource://devtools/shared/transport/transport.js:483:11
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+
+*************************
+Marionette threw an error: TypeError: this.browserForTab is undefined
+hasRemotenessChange@chrome://marionette/content/browser.js:233:9
+executeWhenReady@chrome://marionette/content/browser.js:264:9
+GeckoDriver.prototype.sendAsync@chrome://marionette/content/driver.js:218:5
+send/<@chrome://marionette/content/proxy.js:138:7
+send@chrome://marionette/content/proxy.js:105:12
+ownPriorityGetterTrap.get/<@chrome://marionette/content/proxy.js:24:25
+GeckoDriver.prototype.getElementText@chrome://marionette/content/driver.js:1847:31
+TaskImpl_run@resource://gre/modules/Task.jsm:319:40
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+TaskImpl_handleResultValue@resource://gre/modules/Task.jsm:388:16
+TaskImpl_run@resource://gre/modules/Task.jsm:327:13
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+Dispatcher.prototype.execute@chrome://marionette/content/dispatcher.js:117:13
+Dispatcher.prototype.onPacket@chrome://marionette/content/dispatcher.js:88:5
+DebuggerTransport.prototype._onJSONObjectReady/<@chrome://marionette/content/server.js -> resource://devtools/shared/transport/transport.js:483:11
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+
+[Child 10576] ###!!! ABORT: Aborting on channel error.: file c:/builds/moz2_slave/m-rel-w32-00000000000000000000/build/src/ipc/glue/MessageChannel.cpp, line 2056
+1486326733260	geckodriver	INFO	Listening on 127.0.0.1:62353
+1486326735267	mozprofile::profile	INFO	Using profile path C:\Users\jgaci\AppData\Local\Temp\rust_mozprofile.4hDLbZkESlJ0
+1486326735274	geckodriver::marionette	INFO	Starting browser C:\Program Files (x86)\Mozilla Firefox\firefox.exe
+1486326735281	geckodriver::marionette	INFO	Connecting to Marionette on localhost:62359
+1486326736211	Marionette	INFO	Listening on port 62359
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+*************************
+A coding exception was thrown and uncaught in a Task.
+
+Full message: TypeError: this.browserForTab is undefined
+Full stack: hasRemotenessChange@chrome://marionette/content/browser.js:233:9
+executeWhenReady@chrome://marionette/content/browser.js:264:9
+GeckoDriver.prototype.sendAsync@chrome://marionette/content/driver.js:218:5
+send/<@chrome://marionette/content/proxy.js:138:7
+send@chrome://marionette/content/proxy.js:105:12
+ownPriorityGetterTrap.get/<@chrome://marionette/content/proxy.js:24:25
+GeckoDriver.prototype.getElementText@chrome://marionette/content/driver.js:1847:31
+TaskImpl_run@resource://gre/modules/Task.jsm:319:40
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+TaskImpl_handleResultValue@resource://gre/modules/Task.jsm:388:16
+TaskImpl_run@resource://gre/modules/Task.jsm:327:13
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+Dispatcher.prototype.execute@chrome://marionette/content/dispatcher.js:117:13
+Dispatcher.prototype.onPacket@chrome://marionette/content/dispatcher.js:88:5
+DebuggerTransport.prototype._onJSONObjectReady/<@chrome://marionette/content/server.js -> resource://devtools/shared/transport/transport.js:483:11
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+
+*************************
+*************************
+A coding exception was thrown and uncaught in a Task.
+
+Full message: TypeError: this.browserForTab is undefined
+Full stack: hasRemotenessChange@chrome://marionette/content/browser.js:233:9
+executeWhenReady@chrome://marionette/content/browser.js:264:9
+GeckoDriver.prototype.sendAsync@chrome://marionette/content/driver.js:218:5
+send/<@chrome://marionette/content/proxy.js:138:7
+send@chrome://marionette/content/proxy.js:105:12
+ownPriorityGetterTrap.get/<@chrome://marionette/content/proxy.js:24:25
+GeckoDriver.prototype.getElementText@chrome://marionette/content/driver.js:1847:31
+TaskImpl_run@resource://gre/modules/Task.jsm:319:40
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+TaskImpl_handleResultValue@resource://gre/modules/Task.jsm:388:16
+TaskImpl_run@resource://gre/modules/Task.jsm:327:13
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+Dispatcher.prototype.execute@chrome://marionette/content/dispatcher.js:117:13
+Dispatcher.prototype.onPacket@chrome://marionette/content/dispatcher.js:88:5
+DebuggerTransport.prototype._onJSONObjectReady/<@chrome://marionette/content/server.js -> resource://devtools/shared/transport/transport.js:483:11
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+
+*************************
+*************************
+A coding exception was thrown in a Promise rejection callback.
+See https://developer.mozilla.org/Mozilla/JavaScript_code_modules/Promise.jsm/Promise
+
+Full message: TypeError: this.browserForTab is undefined
+Full stack: hasRemotenessChange@chrome://marionette/content/browser.js:233:9
+executeWhenReady@chrome://marionette/content/browser.js:264:9
+GeckoDriver.prototype.sendAsync@chrome://marionette/content/driver.js:218:5
+send/<@chrome://marionette/content/proxy.js:138:7
+send@chrome://marionette/content/proxy.js:105:12
+ownPriorityGetterTrap.get/<@chrome://marionette/content/proxy.js:24:25
+GeckoDriver.prototype.getElementText@chrome://marionette/content/driver.js:1847:31
+TaskImpl_run@resource://gre/modules/Task.jsm:319:40
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+TaskImpl_handleResultValue@resource://gre/modules/Task.jsm:388:16
+TaskImpl_run@resource://gre/modules/Task.jsm:327:13
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+Dispatcher.prototype.execute@chrome://marionette/content/dispatcher.js:117:13
+Dispatcher.prototype.onPacket@chrome://marionette/content/dispatcher.js:88:5
+DebuggerTransport.prototype._onJSONObjectReady/<@chrome://marionette/content/server.js -> resource://devtools/shared/transport/transport.js:483:11
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+
+*************************
+Marionette threw an error: TypeError: this.browserForTab is undefined
+hasRemotenessChange@chrome://marionette/content/browser.js:233:9
+executeWhenReady@chrome://marionette/content/browser.js:264:9
+GeckoDriver.prototype.sendAsync@chrome://marionette/content/driver.js:218:5
+send/<@chrome://marionette/content/proxy.js:138:7
+send@chrome://marionette/content/proxy.js:105:12
+ownPriorityGetterTrap.get/<@chrome://marionette/content/proxy.js:24:25
+GeckoDriver.prototype.getElementText@chrome://marionette/content/driver.js:1847:31
+TaskImpl_run@resource://gre/modules/Task.jsm:319:40
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+TaskImpl_handleResultValue@resource://gre/modules/Task.jsm:388:16
+TaskImpl_run@resource://gre/modules/Task.jsm:327:13
+TaskImpl@resource://gre/modules/Task.jsm:280:3
+createAsyncFunction/asyncFunction@resource://gre/modules/Task.jsm:254:14
+Task_spawn@resource://gre/modules/Task.jsm:168:12
+Dispatcher.prototype.execute@chrome://marionette/content/dispatcher.js:117:13
+Dispatcher.prototype.onPacket@chrome://marionette/content/dispatcher.js:88:5
+DebuggerTransport.prototype._onJSONObjectReady/<@chrome://marionette/content/server.js -> resource://devtools/shared/transport/transport.js:483:11
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+exports.makeInfallible/<@resource://gre/modules/commonjs/toolkit/loader.js -> resource://devtools/shared/ThreadSafeDevToolsUtils.js:101:14
+
+1486326966710	geckodriver	INFO	Listening on 127.0.0.1:49687
+1486326968728	mozprofile::profile	INFO	Using profile path C:\Users\jgaci\AppData\Local\Temp\rust_mozprofile.sa5CjUycmpub
+1486326968735	geckodriver::marionette	INFO	Starting browser C:\Program Files (x86)\Mozilla Firefox\firefox.exe
+1486326968742	geckodriver::marionette	INFO	Connecting to Marionette on localhost:49693
+1486326969567	Marionette	INFO	Listening on port 49693
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
+JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
