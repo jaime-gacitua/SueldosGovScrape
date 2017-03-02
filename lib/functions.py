@@ -1,74 +1,56 @@
 import pandas as pd
 import numpy as np
-import time
-import unicodedata
+
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, WebDriverException
 
-def createCustomDataFrame():
-   
-    columns = ['entity', 'department', 'type_contract', 'year', 'month', 'Estamento', 'Apellido paterno', 'Apellido materno', 'Nombres', 'Grado EUS',	'Calificación profesional o formación', 'Cargo', 'Región',	'Asignaciones especiales', 'Unidad monetaria', 'Remuneración Bruta Mensualizada', 'Horas extraordinarias', 'Fecha de inicio', 'Fecha de término', 'Observaciones']
-    
-    df = pd.DataFrame(columns=columns)
-    df = FixColumnNames(df)
-    
-    return(df)
+import csv
 
+from tqdm import tnrange, tqdm_notebook
 
+import lxml.html
+import lxml
 
-def FixColumnNames(df):
+import glob
 
-#    columns = ['Apellido paterno', 'Apellido materno', 'Nombres']
-    for c in df.columns:
-        df[c] = df[c].str.lower()
-        df[c] = df[c].str.replace('á', 'a')
-        df[c] = df[c].str.replace('é', 'e')
-        df[c] = df[c].str.replace('í', 'i')
-        df[c] = df[c].str.replace('ó', 'o')
-        df[c] = df[c].str.replace('ú', 'u')
-        df[c] = df[c].str.replace(' ', '_')
-        
-
-    df['Remuneración Bruta Mensualizada'] = df['Remuneración Bruta Mensualizada'].replace(to_replace = "\.+", value="", regex=True)
-
-    return(df)
-
-
-def getGovernmentData(output_file, url, browser, numEnt):
+def getGovernmentData(output_file, url, browser, num):
 
     gov_data = entity_data = createCustomDataFrame()
-    browser = webdriver.Firefox()
     browser.get(url)
 
+    url_list = []
     entities = browser.find_elements_by_class_name("primaryCat")
 
     counter = 0
     for e in entities:
         entity_url = e.get_attribute("href")
-        entity_data = getEntityData(output_file, entity_url, browser)
-        gov_data = pd.concat([gov_data, entity_data])
-        counter = counter + 1
-        if counter >= numEnt:
-            break
+        url_list.append(entity_url)
 
-    return(gov_data)
+    print('Entities:')
+    print(url_list)
+    for url in url_list[num:]: 
+        getEntityData(output_file, url, browser)
 
 def getEntityData(output_file, url, browser):
     browser.get(url)
     entity_data = createCustomDataFrame()
-
+    
+    url_list =[]
     departments = browser.find_elements_by_class_name("primaryCat")
 
     for d in departments:
-        department_url = e.get_attribute("href")
-        department_data = getDepartmentData(output_file, department_url, browser)
-        entity_data = pd.concat([entity_data,department_data])
+        department_url = d.get_attribute("href")
+        url_list.append(department_url)
 
-    return(entity_data)
+#    print('Departments:')
+#    print(url_list)
+    for url in url_list:
+        getDepartmentData(output_file, url, browser)
 
 def getDepartmentData(output_file, url, browser):
-    department_data = createCustomDataFrame()
     
     type_contract = ['per_planta', 'per_contrata']
+    url_list = []
 
     for t in type_contract:
         dept_contract_link = url + "/" + t
@@ -80,25 +62,37 @@ def getDepartmentData(output_file, url, browser):
             for l in years_links_list:
                 link_anchor = l.find_element_by_tag_name("a")
                 year_url = link_anchor.get_attribute("href")
-                year_data = getYearData(output_file, year_url, browser)
-                
-                department_data = pd.concat([department_data,year_data])
-                
-        except:
-            print('Could not get data from' + dept_contract_link)
-            pass
+                url_list.append(year_url)
+        except NoSuchElementException:
+            print ('No contract data in ' + url)
+            g = open('./output/log_error.csv', 'a')
+            g.write(url + ',' + 'No contract' + "\n");
+            g.close()
+        
+    for url in tqdm_notebook(url_list):
+        getYearData(output_file, url, browser)
 
-    return(department_data)
-        
-        
         
 def getYearData(output_file, url, browser):
+    
+    browser.get(url)
+    
+    monthsdata = False
     # Check if we still have to dive down into the months
-    div_months = browser.find_element_by_class_name("linksIntermedios")
+    try:
+        div_months = browser.find_element_by_class_name("linksIntermedios")
+        monthsdata = True
+    except NoSuchElementException:
+        div_months = False
+        #print(url + ' No months, straight to year' )
+        # In this case, we go straight into the yearly tables
+
+    url_list = []
     
     
-    if len(div_months) > 0:
-        year_data = createCustomDataFrame()
+
+    # If we have monthly data:
+    if monthsdata:
 
         unordered_list = div_months.find_element_by_tag_name('ul')
         months_links_list = unordered_list.find_elements_by_tag_name('li')
@@ -106,19 +100,26 @@ def getYearData(output_file, url, browser):
         for m in months_links_list:
             month_link = m.find_element_by_tag_name('a')
             month_url = month_link.get_attribute('href')
-            month_data = getTableData(output_file, month_url, browser)
-            year_data = pd.concat([year_data, month_data])
+            url_list.append(month_url)
+            
 
+    # Else fetch yearly table, we are already there
     else:
-        year_data = getDatainPage(url)
+        url_list.append(url)
     
-    return(year_data)
+#    for url in url_list:
+#        print(url)
+    
+    for url in url_list:  # debug purposes
+        getDatainPage(output_file, url, browser)
+
     
 
-def getDatainPage(output_file, browser, url):
+def getDatainPage(output_file, url, browser):
 
-    browser.get(url) # This will open a Firefox window on your machine
-    table_links = ()
+    browser.get(url)
+
+    table_links = []
     table_links.append(url)
 
     try:
@@ -130,126 +131,151 @@ def getDatainPage(output_file, browser, url):
                 link_element = page.find_element_by_tag_name("a")
                 link = link_element.get_attribute("href")
                 table_links.append(link)
-            except:
+            except NoSuchElementException:
                 pass
 
         # Remove the last element, its the back arrow
         del table_links[-1]
 
     except:
-        pass
+        print ('could not get pagination from ' + url)
+        f = open('./output/log_error.csv', 'a')
+        f.write(url +',' + 'Error Getting pagination' + "\n");
+        f.close()
+
 
     total_tables = len(table_links)
 
+    
     # Loop through all the pages and record data
+    # If the page was already visited, carry on.
     for count, i in enumerate(table_links):
-
-        if count == 0:
-            data = getTableData(browser, i)
+        if not (i in df_visited):
+                getTableData2(output_file, i, browser)
         else:
-            data1 = getTableData(browser, i)
-            data = pd.concat([data, data1])
+                print('Already scraped: ' + i)
 
-    with open(output_file, 'a') as f:
-        df.to_csv(f, header=False)
+def getTableData2(output_file, url, browser):
 
-    return(data)
+    try:
+        browser.get(url)
 
-
-
-
-def getTableData(browser, url):
-
-    browser.get(url)
-
+    except WebDriverException:
+        print ('error page ' + url)
+        f = open('./output/log_error.csv', 'a')
+        f.write(url +',' + 'Reached Error Page' + "\n");
+        f.close()
+        
     #######
     ### 1 Get table metadata from the breadcrumb (Year, Department, Kind of contract, ...)
     #######
 
-    table_location_data = browser.find_element_by_class_name("breadcrumb")
-    breadcrumb_items = table_location_data.find_elements_by_tag_name("li")
-    num_breadcrumbs = len(breadcrumb_items)
+    try:
+        table_location_data = browser.find_element_by_class_name("breadcrumb")
+        breadcrumb_items = table_location_data.find_elements_by_tag_name("li")
+        num_breadcrumbs = len(breadcrumb_items)
 
-    entity = breadcrumb_items[1].text
-    department = breadcrumb_items[2].text
-    type_contract = breadcrumb_items[3].text
-    year = breadcrumb_items[4].text
-    if num_breadcrumbs == 6:
-        month = breadcrumb_items[5]
-    else:
-        month = 'allyear'
+        entity = breadcrumb_items[1].text
+        department = breadcrumb_items[2].text
+        type_contract = breadcrumb_items[3].text
+        year = breadcrumb_items[4].text
+        if num_breadcrumbs == 6:        
+            month = breadcrumb_items[5].text
+        else:
+            month = 'allyear'
+
+    except (NoSuchElementException, IndexError) as err:
+        print ('could not get breadcrumbs from ' + url)
+        f = open('./output/log_error.csv', 'a')
+        f.write(url +',' + 'Error Reading Page' + "\n");
+        f.close()
+        entity='entity'
+        department='department'
+        type_contract='type contract'
+        year='year'
+        month='month'
 
     #######
     ### 2 Get Data of table
     #######
 
-    data = browser.find_elements_by_tag_name("table")
+#    try:
+    root = lxml.html.fromstring(browser.page_source)
+    master_list = []
 
-    for i in data:
+    for row in root.findall('.//tbody//tr'):
+        row_list = []
+        cells = row.xpath('.//td')
 
-        # Headers
-        head = i.find_elements_by_tag_name("thead")
-        for j in head:
-            header_row = j.find_elements_by_tag_name("th")
+        if len(cells)>0:
+            row_list = row_list + [entity, department, type_contract, year, month] 
 
-            # Get length and list of headers
-            ncol = len(header_row)
+            for e in cells:
+                text = e.xpath('text()')
+                if text is None:
+                    text = ''
+                elif len(text) == 0:
+                    text = ''
+                else:
+                    text = text.pop()
+                row_list.append(text) 
 
-            headers = list()
-            # Add table location variables
-            headers_add = ['entity', 'department', 'type_contract',
-                          'year', 'month']
-            
-            for h in headers_add:
-                headers.append(h)
-            # Now add actual data row values
-            for k in header_row:
-                headers.append(k.text)
+            row_list.append(url)
+            master_list.append(row_list)
 
-            headers.append('url')
+#    except:
+#        print(e)
+#        print ('could not get table from ' + url)
+#        f = open('./output/log_error.csv', 'a')
+#        f.write(url +',' + 'Error Reading Table' + "\n");
+#        f.close()
 
-        # Prepare data frame
-        df = pd.DataFrame(columns=headers)
+    #######
+    ### 3 Write into csv files
+    #######
 
-        # Actual Data
-        table_data = i.find_elements_by_tag_name("tbody")
+    try:
+        with open(output_file, "a", newline='\n') as f:
+            writer = csv.writer(f)
+            writer.writerows(master_list)
 
-        for j in table_data:
-            data_row = j.find_elements_by_tag_name("tr")
+        a = open('./output/log_opened.csv', 'a')
+        a.write(url + ',' + str( time.time()  ) + "\n");
+        a.close()
 
-            # Get length and list of data rows
-            nrow = len(data_row)      
-            extracted_rows = 0
-            master_list = list()
-            for count, k in enumerate(data_row):
-                data_element = k.find_elements_by_tag_name("td")
-
-                # Process only if there is data in the row
-                if len(data_element) != 0:
-
-                    actual_record = list()
-
-                    # Add table location variables
-                    actual_record.append(entity)
-                    actual_record.append(department)
-                    actual_record.append(type_contract)
-                    actual_record.append(year)
-                    actual_record.append(month)
-
-                    # Populate list with actual record
-                    for l in data_element:
-                        actual_record.append(l.text)
-
-                    # Add url
-                    actual_record.append(url)
-
-                    master_list.append(actual_record)
-                    extracted_rows += 1
-
-    df = pd.DataFrame(master_list, columns = headers)
-    df = FixColumnNames(df)
-
-    return(df)
-
+    except:
+        try:
+            # encoding problems
+            print('Encoding problems')
+            master_list = [[j.encode('latin1', 'ignore') for j in row] for row in master_list]
     
-# Not used anymore      
+            with open(output_file, "a", newline='\n') as f:
+                writer = csv.writer(f)
+                writer.writerows(master_list)
+
+            a = open('./output/log_opened.csv', 'a')
+            a.write(url + ',' + str( time.time()  ) + "\n");
+            a.close()
+
+        except:
+            print ('could not write data from ' + url)
+            g = open('./output/log_error.csv', 'a')
+            g.write(url + ',' + 'Error writing' + "\n");
+            g.close()
+        
+
+def cleanLatin(df):
+    replace_dict = {'xf3' : 'ó',
+                   'xfa' : 'ú',
+                   'xed' : 'í',
+                   'xf1' : 'ñ',
+                   'Ã±' : 'ñ'}
+
+    for key,value in replace_dict.items():
+        for col in tqdm_notebook(df.columns):
+            df[col] = df[col].str.replace(key, value)
+            df[col] = df[col].str.replace('\\', '')
+            df[col] = df[col].str.replace("^b'", '')
+            df[col] = df[col].str.replace("'$", '')    
+    
+    

@@ -1,4 +1,8 @@
 \output
+\output\old
+\old
+\data
+
 
 # Windows image file caches
 Thumbs.db
