@@ -269,13 +269,19 @@ def cleanLatin(df):
                    'xfa' : 'ú',
                    'xed' : 'í',
                    'xf1' : 'ñ',
-                   'Ã±' : 'ñ'}
+                   'Ã±' : 'ñ',
+                   'AÃ±o' : 'Año',
+                   'Ãºb' : 'úb',
+                   'rÃ­a' : 'ría',
+                   'iÃ³n' : 'ión'}
 
     for key,value in replace_dict.items():
         for col in tqdm_notebook(df.columns):
-            df[col] = df[col].str.replace(key, value)
-            df[col] = df[col].str.replace('\\', '')
-            df[col] = df[col].str.replace("^b'", '')
-            df[col] = df[col].str.replace("'$", '')    
-    
+            try:
+                df.ix[:,col] = df[col].str.replace(key, value)
+                df.ix[:,col] = df[col].str.replace('\\', '')
+                df.ix[:,col] = df[col].str.replace("^b'", '')
+                df.ix[:,col] = df[col].str.replace("'$", '')    
+            except:
+                print('Could not clean column:', col)    
     
