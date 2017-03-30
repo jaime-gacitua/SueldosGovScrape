@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, WebDriverException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException, TimeoutException
 
 import csv
 
@@ -13,9 +13,12 @@ import lxml
 
 import glob
 
+from time import time
+import traceback
+
 def getGovernmentData(output_file, url, browser, num):
 
-    gov_data = entity_data = createCustomDataFrame()
+#    gov_data = entity_data = createCustomDataFrame()
     browser.get(url)
 
     url_list = []
@@ -33,7 +36,7 @@ def getGovernmentData(output_file, url, browser, num):
 
 def getEntityData(output_file, url, browser):
     browser.get(url)
-    entity_data = createCustomDataFrame()
+#    entity_data = createCustomDataFrame()
     
     url_list =[]
     departments = browser.find_elements_by_class_name("primaryCat")
@@ -64,10 +67,12 @@ def getDepartmentData(output_file, url, browser):
                 year_url = link_anchor.get_attribute("href")
                 url_list.append(year_url)
         except NoSuchElementException:
-            print ('No contract data in ' + url)
+            traceback.print_exc()
+            print ('No contract data ' + t + ' in ' + url)
             g = open('./output/log_error.csv', 'a')
-            g.write(url + ',' + 'No contract' + "\n");
+            g.write(url + ',' + 'No contract ' + t + "\n");
             g.close()
+
         
     for url in tqdm_notebook(url_list):
         getYearData(output_file, url, browser)
@@ -75,7 +80,17 @@ def getDepartmentData(output_file, url, browser):
         
 def getYearData(output_file, url, browser):
     
-    browser.get(url)
+    try:
+	    browser.get(url)
+    except TimeoutException:
+    	print 'Timeout Exception'
+    	traceback.print_exc()
+    	g = open('./output/log_error.csv', 'a')
+        g.write(url + ',' + 'Timeout' + "\n");
+        g.close()
+
+
+
     
     monthsdata = False
     # Check if we still have to dive down into the months
@@ -140,13 +155,15 @@ def getDatainPage(output_file, url, browser):
     except:
         print ('could not get pagination from ' + url)
         f = open('./output/log_error.csv', 'a')
-        f.write(url +',' + 'Error Getting pagination' + "\n");
+        f.write(url +',' + 'Could not get pagination' + "\n");
         f.close()
 
 
     total_tables = len(table_links)
 
-    
+    if 'df_visited' not in globals():
+    	df_visited = [' ']
+
     # Loop through all the pages and record data
     # If the page was already visited, carry on.
     for count, i in enumerate(table_links):
@@ -187,7 +204,7 @@ def getTableData2(output_file, url, browser):
     except (NoSuchElementException, IndexError) as err:
         print ('could not get breadcrumbs from ' + url)
         f = open('./output/log_error.csv', 'a')
-        f.write(url +',' + 'Error Reading Page' + "\n");
+        f.write(url +',' + 'Could not get breadcrumbs' + "\n");
         f.close()
         entity='entity'
         department='department'
@@ -233,6 +250,10 @@ def getTableData2(output_file, url, browser):
     #######
     ### 3 Write into csv files
     #######
+    a = open('./output/log_opened.csv', 'a')
+    a.write(url + ',' + str( time()  ) + "\n");
+    a.close()
+
 
     try:
         with open(output_file, "a", newline='\n') as f:
@@ -240,7 +261,7 @@ def getTableData2(output_file, url, browser):
             writer.writerows(master_list)
 
         a = open('./output/log_opened.csv', 'a')
-        a.write(url + ',' + str( time.time()  ) + "\n");
+        a.write(url + ',' + str( time()  ) + "\n");
         a.close()
 
     except:
@@ -249,12 +270,12 @@ def getTableData2(output_file, url, browser):
             print('Encoding problems')
             master_list = [[j.encode('latin1', 'ignore') for j in row] for row in master_list]
     
-            with open(output_file, "a", newline='\n') as f:
+            with open(output_file, "a", newline='\n', encoding='latin1') as f:
                 writer = csv.writer(f)
                 writer.writerows(master_list)
 
             a = open('./output/log_opened.csv', 'a')
-            a.write(url + ',' + str( time.time()  ) + "\n");
+            a.write(url + ',' + str( time()  ) + "\n");
             a.close()
 
         except:
