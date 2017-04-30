@@ -83,11 +83,11 @@ def getYearData(output_file, url, browser):
     try:
 	    browser.get(url)
     except TimeoutException:
-    	print 'Timeout Exception'
+    	print('Timeout Exception')
     	traceback.print_exc()
     	g = open('./output/log_error.csv', 'a')
-        g.write(url + ',' + 'Timeout' + "\n");
-        g.close()
+    	g.write(url + ',' + 'Timeout' + "\n");
+    	g.close()
 
 
 
@@ -309,7 +309,8 @@ def cleanLatin(df):
                    'Bxc1SICA' : 'BÁSICA',
                    'INGLÃS' : 'INGLÉS',
                    'Ã­di' : 'ídi',
-                   'rãq' : 'ríq'
+                   'rãq' : 'ríq',
+                   'Ã­a' : 'ía'
                    }
 
     for key,value in tqdm_notebook(replace_dict.items()):
