@@ -15,7 +15,7 @@ import glob
 
 def getGovernmentData(output_file, url, browser, num):
 
-    gov_data = entity_data = createCustomDataFrame()
+    #gov_data = entity_data = createCustomDataFrame()
     browser.get(url)
 
     url_list = []
@@ -33,7 +33,7 @@ def getGovernmentData(output_file, url, browser, num):
 
 def getEntityData(output_file, url, browser):
     browser.get(url)
-    entity_data = createCustomDataFrame()
+    #entity_data = createCustomDataFrame()
     
     url_list =[]
     departments = browser.find_elements_by_class_name("primaryCat")

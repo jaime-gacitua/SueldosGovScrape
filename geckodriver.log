@@ -22640,3 +22640,8 @@ Full stack:
 JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
 JavaScript warning: http://www.gobiernotransparentechile.cl/assets/js/jquery/jquery-1.3.2.min.js, line 19: unreachable code after return statement
 [Child 15776] WARNING: pipe error: 109: file c:/builds/moz2_slave/m-rel-w32-00000000000000000000/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+1490323231829	geckodriver	INFO	Listening on 127.0.0.1:62098
+1490323234783	mozprofile::profile	INFO	Using profile path C:\Users\jgaci\AppData\Local\Temp\rust_mozprofile.SOvaH98WxpHX
+1490323234798	geckodriver::marionette	INFO	Starting browser C:\Program Files (x86)\Mozilla Firefox\firefox.exe
+1490323234814	geckodriver::marionette	INFO	Connecting to Marionette on localhost:62105
+1490323238476	Marionette	INFO	Listening on port 62105
