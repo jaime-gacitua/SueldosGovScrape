@@ -18,11 +18,7 @@ import traceback
 
 def getGovernmentData(output_file, url, browser, num):
 
-<<<<<<< HEAD
     #gov_data = entity_data = createCustomDataFrame()
-=======
-#    gov_data = entity_data = createCustomDataFrame()
->>>>>>> ec90811c16da4d3fd09ea5346d41ba0357d574d4
     browser.get(url)
 
     url_list = []
@@ -35,17 +31,13 @@ def getGovernmentData(output_file, url, browser, num):
 
     print('Entities:')
     print(url_list)
-    for url in url_list[num:]: 
+    for url in url_list[num:]:
         getEntityData(output_file, url, browser)
 
 def getEntityData(output_file, url, browser):
     browser.get(url)
-<<<<<<< HEAD
     #entity_data = createCustomDataFrame()
-=======
-#    entity_data = createCustomDataFrame()
->>>>>>> ec90811c16da4d3fd09ea5346d41ba0357d574d4
-    
+
     url_list =[]
     departments = browser.find_elements_by_class_name("primaryCat")
 
@@ -59,7 +51,7 @@ def getEntityData(output_file, url, browser):
         getDepartmentData(output_file, url, browser)
 
 def getDepartmentData(output_file, url, browser):
-    
+
     type_contract = ['per_planta', 'per_contrata']
     url_list = []
 
@@ -81,13 +73,13 @@ def getDepartmentData(output_file, url, browser):
             g.write(url + ',' + 'No contract ' + t + "\n");
             g.close()
 
-        
+
     for url in tqdm_notebook(url_list):
         getYearData(output_file, url, browser)
 
-        
+
 def getYearData(output_file, url, browser):
-    
+
     try:
 	    browser.get(url)
     except TimeoutException:
@@ -99,7 +91,7 @@ def getYearData(output_file, url, browser):
 
 
 
-    
+
     monthsdata = False
     # Check if we still have to dive down into the months
     try:
@@ -111,8 +103,8 @@ def getYearData(output_file, url, browser):
         # In this case, we go straight into the yearly tables
 
     url_list = []
-    
-    
+
+
 
     # If we have monthly data:
     if monthsdata:
@@ -124,19 +116,19 @@ def getYearData(output_file, url, browser):
             month_link = m.find_element_by_tag_name('a')
             month_url = month_link.get_attribute('href')
             url_list.append(month_url)
-            
+
 
     # Else fetch yearly table, we are already there
     else:
         url_list.append(url)
-    
+
 #    for url in url_list:
 #        print(url)
-    
+
     for url in url_list:  # debug purposes
         getDatainPage(output_file, url, browser)
 
-    
+
 
 def getDatainPage(output_file, url, browser):
 
@@ -190,7 +182,7 @@ def getTableData2(output_file, url, browser):
         f = open('./output/log_error.csv', 'a')
         f.write(url +',' + 'Reached Error Page' + "\n");
         f.close()
-        
+
     #######
     ### 1 Get table metadata from the breadcrumb (Year, Department, Kind of contract, ...)
     #######
@@ -204,7 +196,7 @@ def getTableData2(output_file, url, browser):
         department = breadcrumb_items[2].text
         type_contract = breadcrumb_items[3].text
         year = breadcrumb_items[4].text
-        if num_breadcrumbs == 6:        
+        if num_breadcrumbs == 6:
             month = breadcrumb_items[5].text
         else:
             month = 'allyear'
@@ -233,7 +225,7 @@ def getTableData2(output_file, url, browser):
         cells = row.xpath('.//td')
 
         if len(cells)>0:
-            row_list = row_list + [entity, department, type_contract, year, month] 
+            row_list = row_list + [entity, department, type_contract, year, month]
 
             for e in cells:
                 text = e.xpath('text()')
@@ -243,7 +235,7 @@ def getTableData2(output_file, url, browser):
                     text = ''
                 else:
                     text = text.pop()
-                row_list.append(text) 
+                row_list.append(text)
 
             row_list.append(url)
             master_list.append(row_list)
@@ -277,7 +269,7 @@ def getTableData2(output_file, url, browser):
             # encoding problems
             print('Encoding problems')
             master_list = [[j.encode('latin1', 'ignore') for j in row] for row in master_list]
-    
+
             with open(output_file, "a", newline='\n', encoding='latin1') as f:
                 writer = csv.writer(f)
                 writer.writerows(master_list)
@@ -291,7 +283,7 @@ def getTableData2(output_file, url, browser):
             g = open('./output/log_error.csv', 'a')
             g.write(url + ',' + 'Error writing' + "\n");
             g.close()
-        
+
 
 def cleanLatin(df):
     replace_dict = {'xf3' : 'ó',
@@ -327,7 +319,6 @@ def cleanLatin(df):
                 df.ix[:,col] = df[col].str.replace(key, value)
                 df.ix[:,col] = df[col].str.replace('\\', '')
                 df.ix[:,col] = df[col].str.replace("^b'", '')
-                df.ix[:,col] = df[col].str.replace("'$", '')    
+                df.ix[:,col] = df[col].str.replace("'$", '')
             except:
-                print('Could not clean column:', col)    
-
+                print('Could not clean column:', col)
