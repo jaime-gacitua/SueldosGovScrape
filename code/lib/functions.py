@@ -18,14 +18,18 @@ import glob
 from time import time
 import traceback
 
-def listUrlsNames(listWebs):
+def listUrlsNames(browser, url, searchStr):
     """
-    Given a list of web objects
-    get urls and text
+    Searches for available links in an url
+    Returns list of urls and text
     """
+
+    browser.get(url)
+    items = browser.find_elements_by_class_name(searchStr)
+
     urls = []
     names = []
-    for e in listWebs:
+    for e in items:
         url = e.get_attribute("href")
         name = e.text
 
@@ -43,21 +47,18 @@ def getGovernmentData(output_file, url, browser, num, period):
     but also 'Presidencia de la Republica' is an entity
     """
 
-    browser.get(url)
-
     # Fetch list of entities to be looked for
-    entities = browser.find_elements_by_class_name("primaryCat")
-    ent_urls, ent_names = listUrlsNames(entities)
+    ent_urls, ent_names = listUrlsNames(browser, url, 'primaryCat')
 
     # Report what we got
     print('Entities:')
     for i, (t, e) in enumerate(zip(ent_names, ent_urls)):
-        print('{}.- {}: {}'.format(i,t,e))
+        print('{}.- {}: {}'.format(i, t, e))
 
-    # Fire next level of search
-    for name,url in zip(ent_names[num:],ent_urls[num:]):
-        print(name)
-        getEntityData(output_file, name, url, browser, period)
+    # Call next level of search
+    for entity, url in zip(ent_names[num:], ent_urls[num:]):
+        print(entity)
+        getEntityData(output_file, entity, url, browser, period)
 
 
 def getEntityData(output_file, entity, url, browser, period):
@@ -69,14 +70,10 @@ def getEntityData(output_file, entity, url, browser, period):
 
     """
 
-    browser.get(url)
-    #entity_data = createCustomDataFrame()
+    # Fetch list of departments to be looked for
+    dep_urls, dep_names = listUrlsNames(browser, url, 'primaryCat')
 
-    url_list = []
-    departments = browser.find_elements_by_class_name("primaryCat")
-
-    dep_urls, dep_names = listUrlsNames(departments)
-
+    # Call next level of search
     for dept,url in zip(dep_names, dep_urls):
         print(dept)
         getDepartmentData(output_file, entity, dept, url, browser, period)
@@ -118,7 +115,7 @@ def getDepartmentData(output_file, entity, dept, url, browser, period):
             g.write(url + ',' + 'No contract ' + t + "\n");
             g.close()
 
-    for contract, year, url in tqdm_notebook(zip(contracts, years,url_list)):
+    for contract, year, url in tqdm_notebook(zip(contracts, years, url_list)):
         print(contract, year)
         getYearData(output_file, entity, dept, contract, year, url, browser, period)
 
@@ -245,7 +242,7 @@ def getTableData2(output_file, entity, dept, contract, year, month, url, browser
         breadcrumb_items = table_location_data.find_elements_by_tag_name("li")
         num_breadcrumbs = len(breadcrumb_items)
 
-        entity = breadcrumb_items[1].text
+        entity = breadcrumb_items[1].texts
         department = breadcrumb_items[2].text
         type_contract = breadcrumb_items[3].text
         year = breadcrumb_items[4].text
