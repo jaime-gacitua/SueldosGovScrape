@@ -6,7 +6,9 @@ from selenium.common.exceptions import NoSuchElementException, WebDriverExceptio
 
 import csv
 
+import tqdm
 from tqdm import tnrange, tqdm_notebook
+tqdm.monitor_interval = 0
 
 import lxml.html
 import lxml
@@ -16,48 +18,87 @@ import glob
 from time import time
 import traceback
 
-def getGovernmentData(output_file, url, browser, num):
+def listUrlsNames(listWebs):
+    """
+    Given a list of web objects
+    get urls and text
+    """
+    urls = []
+    names = []
+    for e in listWebs:
+        url = e.get_attribute("href")
+        name = e.text
 
-    #gov_data = entity_data = createCustomDataFrame()
+        urls.append(url)
+        names.append(name)
+
+    return(urls, names)
+
+def getGovernmentData(output_file, url, browser, num, period):
+    """
+    Gets all the entities within the government data
+    Then dives into each of them to get the data
+
+    Each Entity could be considered a 'Ministerio', 
+    but also 'Presidencia de la Republica' is an entity
+    """
+
     browser.get(url)
 
-    url_list = []
+    # Fetch list of entities to be looked for
     entities = browser.find_elements_by_class_name("primaryCat")
+    ent_urls, ent_names = listUrlsNames(entities)
 
-    counter = 0
-    for e in entities:
-        entity_url = e.get_attribute("href")
-        url_list.append(entity_url)
-
+    # Report what we got
     print('Entities:')
-    print(url_list)
-    for url in url_list[num:]:
-        getEntityData(output_file, url, browser)
+    for i, (t, e) in enumerate(zip(ent_names, ent_urls)):
+        print('{}.- {}: {}'.format(i,t,e))
 
-def getEntityData(output_file, url, browser):
+    # Fire next level of search
+    for name,url in zip(ent_names[num:],ent_urls[num:]):
+        print(name)
+        getEntityData(output_file, name, url, browser, period)
+
+
+def getEntityData(output_file, entity, url, browser, period):
+    """
+    Within an entity there are several departments
+
+    For example 'SENAME' is part of the entity
+    'Ministerio de Justicia'
+
+    """
+
     browser.get(url)
     #entity_data = createCustomDataFrame()
 
-    url_list =[]
+    url_list = []
     departments = browser.find_elements_by_class_name("primaryCat")
 
-    for d in departments:
-        department_url = d.get_attribute("href")
-        url_list.append(department_url)
+    dep_urls, dep_names = listUrlsNames(departments)
 
-#    print('Departments:')
-#    print(url_list)
-    for url in url_list:
-        getDepartmentData(output_file, url, browser)
+    for dept,url in zip(dep_names, dep_urls):
+        print(dept)
+        getDepartmentData(output_file, entity, dept, url, browser, period)
 
-def getDepartmentData(output_file, url, browser):
+def getDepartmentData(output_file, entity, dept, url, browser, period):
+    """
+    For each department we must get both types of personnel
+    planta, contrata
+
+    Within each, we get into the yearly data
+
+    """
 
     type_contract = ['per_planta', 'per_contrata']
     url_list = []
+    contracts = []
+    years = []
 
     for t in type_contract:
-        dept_contract_link = url + "/" + t
+        dept_contract_link = '{}/{}'.format(url, t)
         browser.get(dept_contract_link)
+
         try:
             div_years = browser.find_element_by_class_name("linksIntermedios")
             unordered_list = div_years.find_element_by_tag_name("ul")
@@ -65,20 +106,24 @@ def getDepartmentData(output_file, url, browser):
             for l in years_links_list:
                 link_anchor = l.find_element_by_tag_name("a")
                 year_url = link_anchor.get_attribute("href")
+                year_text = link_anchor.text
                 url_list.append(year_url)
-        except NoSuchElementException:
+                contracts.append(t)
+                years.append(year_text)
+
+        except:
             traceback.print_exc()
-            print ('No contract data ' + t + ' in ' + url)
-            g = open('./output/log_error.csv', 'a')
+            print('No contract data ' + t + ' in ' + url)
+            g = open('../data/output/log_error.csv', 'a')
             g.write(url + ',' + 'No contract ' + t + "\n");
             g.close()
 
+    for contract, year, url in tqdm_notebook(zip(contracts, years,url_list)):
+        print(contract, year)
+        getYearData(output_file, entity, dept, contract, year, url, browser, period)
 
-    for url in tqdm_notebook(url_list):
-        getYearData(output_file, url, browser)
 
-
-def getYearData(output_file, url, browser):
+def getYearData(output_file, entity, dept, contract, year, url, browser, period):
 
     try:
 	    browser.get(url)
@@ -88,8 +133,6 @@ def getYearData(output_file, url, browser):
     	g = open('./output/log_error.csv', 'a')
     	g.write(url + ',' + 'Timeout' + "\n");
     	g.close()
-
-
 
 
     monthsdata = False
@@ -103,58 +146,68 @@ def getYearData(output_file, url, browser):
         # In this case, we go straight into the yearly tables
 
     url_list = []
-
-
+    months = []
 
     # If we have monthly data:
     if monthsdata:
-
         unordered_list = div_months.find_element_by_tag_name('ul')
         months_links_list = unordered_list.find_elements_by_tag_name('li')
 
         for m in months_links_list:
             month_link = m.find_element_by_tag_name('a')
             month_url = month_link.get_attribute('href')
+            month_text = month_link.text
             url_list.append(month_url)
+            months.append(month_text)
 
-
-    # Else fetch yearly table, we are already there
+    # Else fetch yearly table, we are already there, so month has the flag 'all year'
     else:
         url_list.append(url)
+        months = ['allyear']
 
-#    for url in url_list:
-#        print(url)
-
-    for url in url_list:  # debug purposes
-        getDatainPage(output_file, url, browser)
+    for month, url in zip(months, url_list):  # debug purposes
+        getDatainPage(output_file, entity, dept, contract, year, month, url, browser, period)
 
 
+def getDatainPage(output_file, entity, dept, contract, year, month, url, browser, period):
+    """
+    For a certain year or month we find the actual data
 
-def getDatainPage(output_file, url, browser):
+    The data can be in a single page, or split across several pages
+    Here we capture the links for all the pages and 
+    then call the data extraction
 
+    """
     browser.get(url)
 
     table_links = []
     table_links.append(url)
 
+    pages = []
     try:
         pagination = browser.find_element_by_class_name("pagination")
         pages = pagination.find_elements_by_tag_name("li")
 
+    except:
+        pass
+        #print('pagination error: getting li in {}'.format(url))
+
+    try:
         for page in pages:
-            try:
-                link_element = page.find_element_by_tag_name("a")
-                link = link_element.get_attribute("href")
-                table_links.append(link)
-            except NoSuchElementException:
-                pass
+                try:
+                    link_element = page.find_element_by_tag_name("a")
+                    link = link_element.get_attribute("href")
+                    table_links.append(link)
+                except NoSuchElementException:
+                    pass
 
         # Remove the last element, its the back arrow
-        del table_links[-1]
+        if len(table_links) >= 2:
+            del table_links[-1]
 
     except:
-        print ('could not get pagination from ' + url)
-        f = open('./output/log_error.csv', 'a')
+        print('pagination error: getting links in {}'.format(url))
+        f = open('../data/output/log_error_{}.csv'.format(period), 'a')
         f.write(url +',' + 'Could not get pagination' + "\n");
         f.close()
 
@@ -166,20 +219,20 @@ def getDatainPage(output_file, url, browser):
 
     # Loop through all the pages and record data
     # If the page was already visited, carry on.
-    for count, i in enumerate(table_links):
-        if not (i in df_visited):
-                getTableData2(output_file, i, browser)
+    for count, url in enumerate(table_links):
+        if not (url in df_visited):
+                getTableData2(output_file, entity, contract, dept, year, month, url, browser, period)
         else:
-                print('Already scraped: ' + i)
+                print('Already scraped: ' + url)
 
-def getTableData2(output_file, url, browser):
+def getTableData2(output_file, entity, dept, contract, year, month, url, browser, period):
 
     try:
         browser.get(url)
 
     except WebDriverException:
         print ('error page ' + url)
-        f = open('./output/log_error.csv', 'a')
+        f = open('../data/output/log_error_{}.csv'.format(period), 'a')
         f.write(url +',' + 'Reached Error Page' + "\n");
         f.close()
 
@@ -203,14 +256,14 @@ def getTableData2(output_file, url, browser):
 
     except (NoSuchElementException, IndexError) as err:
         print ('could not get breadcrumbs from ' + url)
-        f = open('./output/log_error.csv', 'a')
+        f = open('../data/output/log_error.csv', 'a')
         f.write(url +',' + 'Could not get breadcrumbs' + "\n");
         f.close()
-        entity='entity'
-        department='department'
-        type_contract='type contract'
-        year='year'
-        month='month'
+        entity=entity
+        department=dept
+        type_contract=contract
+        year=year
+        month=month
 
     #######
     ### 2 Get Data of table
@@ -238,6 +291,7 @@ def getTableData2(output_file, url, browser):
                 row_list.append(text)
 
             row_list.append(url)
+            #print(row_list)
             master_list.append(row_list)
 
 #    except:
@@ -250,17 +304,17 @@ def getTableData2(output_file, url, browser):
     #######
     ### 3 Write into csv files
     #######
-    a = open('./output/log_opened.csv', 'a')
+    a = open('../data/output/log_opened_{}.csv'.format(period), 'a')
     a.write(url + ',' + str( time()  ) + "\n");
     a.close()
 
 
     try:
         with open(output_file, "a", newline='\n') as f:
-            writer = csv.writer(f)
+            writer = csv.writer(f, delimiter='|', quoting=csv.QUOTE_ALL)
             writer.writerows(master_list)
 
-        a = open('./output/log_opened.csv', 'a')
+        a = open('../data/output/log_opened_{}.csv'.format(period), 'a')
         a.write(url + ',' + str( time()  ) + "\n");
         a.close()
 
@@ -268,19 +322,19 @@ def getTableData2(output_file, url, browser):
         try:
             # encoding problems
             print('Encoding problems')
-            master_list = [[j.encode('latin1', 'ignore') for j in row] for row in master_list]
+            master_list = [[j.encode('utf-8', 'ignore') for j in row] for row in master_list]
 
-            with open(output_file, "a", newline='\n', encoding='latin1') as f:
-                writer = csv.writer(f)
+            with open(output_file, "a", newline='\n', encoding='utf-8') as f:
+                writer = csv.writer(f, delimiter='|', quoting=csv.QUOTE_ALL)
                 writer.writerows(master_list)
 
-            a = open('./output/log_opened.csv', 'a')
+            a = open('../data/output/log_opened_{}.csv'.format(period), 'a')
             a.write(url + ',' + str( time()  ) + "\n");
             a.close()
 
         except:
             print ('could not write data from ' + url)
-            g = open('./output/log_error.csv', 'a')
+            g = open('./output/log_error_{}.csv'.format(period), 'a')
             g.write(url + ',' + 'Error writing' + "\n");
             g.close()
 
@@ -316,9 +370,9 @@ def cleanLatin(df):
     for key,value in tqdm_notebook(replace_dict.items()):
         for col in df.columns:
             try:
-                df.ix[:,col] = df[col].str.replace(key, value)
-                df.ix[:,col] = df[col].str.replace('\\', '')
-                df.ix[:,col] = df[col].str.replace("^b'", '')
-                df.ix[:,col] = df[col].str.replace("'$", '')
+                df.loc[:,col] = df[col].str.replace(key, value)
+                df.loc[:,col] = df[col].str.replace('\\', '')
+                df.loc[:,col] = df[col].str.replace("^b'", '')
+                df.loc[:,col] = df[col].str.replace("'$", '')
             except:
                 print('Could not clean column:', col)
