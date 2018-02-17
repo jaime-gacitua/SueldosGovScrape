@@ -18,6 +18,12 @@ import glob
 from time import time
 import traceback
 
+from datetime import datetime
+
+import locale
+locale.setlocale(locale.LC_ALL, 'es_ES')
+
+
 def listUrlsNames(browser, url, searchStr):
     """
     Searches for available links in an url
@@ -218,7 +224,7 @@ def getDatainPage(output_file, entity, dept, contract, year, month, url, browser
     # If the page was already visited, carry on.
     for count, url in enumerate(table_links):
         if not (url in df_visited):
-                getTableData2(output_file, entity, contract, dept, year, month, url, browser, period)
+                getTableData2(output_file, entity, dept, contract, year, month, url, browser, period)
         else:
                 print('Already scraped: ' + url)
 
@@ -364,12 +370,86 @@ def cleanLatin(df):
                    'Ã­a' : 'ía'
                    }
 
-    for key,value in tqdm_notebook(replace_dict.items()):
-        for col in df.columns:
-            try:
-                df.loc[:,col] = df[col].str.replace(key, value)
-                df.loc[:,col] = df[col].str.replace('\\', '')
-                df.loc[:,col] = df[col].str.replace("^b'", '')
-                df.loc[:,col] = df[col].str.replace("'$", '')
-            except:
+    for col in tqdm_notebook(df.columns):
+        try:
+        
+            df.loc[:,col] = df[col].str.replace("^b'", '')
+            df.loc[:,col] = df[col].str.replace("'$", '')
+
+            for key,value in replace_dict.items():
+
+                    df.loc[:,col] = df[col].str.replace(key, value)
+                    df.loc[:,col] = df[col].str.replace('\\', '')
+    
+        except:
                 print('Could not clean column:', col)
+
+def pd_preprocess(df):
+    #Format
+    df['year'] = df['year'].str.lower()
+    df['month'] = df['month'].str.lower()
+
+    #Combine
+    df['yearmonth'] = df['year'] + '-' + df['month']
+
+    # Remove keywords
+    df['yearmonth'] = df['yearmonth'].str.replace('año ', '')
+    df['yearmonth'] = df['yearmonth'].str.replace('a�o ', '')
+
+    # Allyear will be considered january
+    df['yearmonth'] = df['yearmonth'].str.strip()
+    df['yearmonth'] = df['yearmonth'].str.replace(' ', '')
+
+
+def pd_stats(df, colCount):
+    try:
+        print('Coverage before fix:')
+        a = pd.notnull(df['datets']).value_counts()
+        print(a)
+        return(a)
+    except:
+        print('No date timestamp column. Creating')
+        df.loc[:, 'datets'] = datetime(2018,1,1)
+        df.loc[:, 'datets'] = None
+        a = pd.notnull(df['datets']).value_counts()
+        print(a)
+        return(a)
+
+def pd_runfix(func, df, colCount, col):
+    print('----BEFORE FIX ------')
+    before = pd_stats(df, colCount)
+
+    func(df, colCount, col)
+
+    print('----AFTER FIX ------')
+    after = pd_stats(df, colCount)
+
+    print('Improved: {}'.format(after-before))
+
+def pd_allyear(df, colCount, col):
+
+    df['aux'] = df[col].str.extract('(\d{4})-allyear', expand=False)
+    df['aux2'] = df['aux'] + '-01-01'
+    df['aux3'] = pd.to_datetime(df['aux2'], format='%Y-%m-%d')
+
+    df.loc[pd.isnull(df[colCount]), colCount] = df['aux3']
+
+def pd_yearmonth(df, colCount, col):
+
+    df['aux'] = df[col].str.extract('(\d{4} ?-? ?[a-z]+)', expand=False)
+    df['aux'] = df['aux'].str.replace(' ', '')
+
+    df['aux2'] = pd.to_datetime(df['aux'], format='%Y-%B', errors='coerce')
+    df.loc[pd.isnull(df[colCount]), colCount] = df['aux2']    
+
+    df['aux2'] = pd.to_datetime(df['aux'], format='%Y%B', errors='coerce')
+    df.loc[pd.isnull(df[colCount]), colCount] = df['aux2']    
+
+
+def pd_monthallyear(df, colCount, col):
+
+    df['aux'] = df[col].str.extract('>*([a-z]+)-allyear', expand=False)
+    df['aux2'] = '2017-' + df['aux'] + '-01'
+    df['aux3'] = pd.to_datetime(df['aux2'], format='%Y-%B-%d', errors='coerce')
+    
+    df.loc[pd.isnull(df[colCount]), colCount] = df['aux3']    

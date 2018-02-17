@@ -15,6 +15,15 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "code/lib/functions.py",
+			"settings":
+			{
+				"buffer_size": 11602,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -57,7 +66,9 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/jaime/Google Drive/Proyectos/SueldosGovScrape"
+		"/Users/jaime/Google Drive/Proyectos/SueldosGovScrape",
+		"/Users/jaime/Google Drive/Proyectos/SueldosGovScrape/code",
+		"/Users/jaime/Google Drive/Proyectos/SueldosGovScrape/code/lib"
 	],
 	"file_history":
 	[
@@ -99,8 +110,41 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "code/lib/functions.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11602,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7022,
+								7022
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3319.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
