@@ -452,4 +452,63 @@ def pd_monthallyear(df, colCount, col):
     df['aux2'] = '2017-' + df['aux'] + '-01'
     df['aux3'] = pd.to_datetime(df['aux2'], format='%Y-%B-%d', errors='coerce')
     
-    df.loc[pd.isnull(df[colCount]), colCount] = df['aux3']    
+    df.loc[pd.isnull(df[colCount]), colCount] = df['aux3']
+
+
+def createSalaryTimeline(df, p, cols):
+    #scope = df['person'] == p
+    
+    col1 = [x for x in cols if 'url' not in x]
+    
+    pdf = df.loc[df['person']== p].drop_duplicates(col1)
+    
+    #display(pdf)
+    
+    # Allyear values
+    auxYears = pdf.loc[pdf['month'] == 'allyear'].drop_duplicates('datets').set_index('datets').resample('MS').ffill().reset_index()
+    
+
+    # Not Allyear Values
+    auxRest = pdf.loc[pdf['month'] != 'allyear']
+
+    out = pd.concat([auxYears, auxRest])
+    out = out.loc[:,cols]
+    out = out.set_index('datets')
+
+    # Create list of all indexes
+    ixs = []
+    for index,row in pdf.loc[pd.notnull(pdf['start1'] - pdf['end1'])].iterrows():
+        ix = pd.DatetimeIndex(start=row['start1'], end=row['end1'], freq='MS')
+        ixs.append(ix)
+    
+    # If all are none, assume working until end of government
+    if len(ixs) == 0:
+        pdf['end1'] = datetime(2018,3,31)
+        for index,row in pdf.loc[pd.notnull(pdf['start1'] - pdf['end1'])].iterrows():
+            ix = pd.DatetimeIndex(start=row['start1'], end=row['end1'], freq='MS')
+            ixs.append(ix)
+
+        
+    # Create union of all indexes
+    try:
+        if len(ixs) == 1:
+            ixsAll = ixs[0]
+        else:
+            for i in ixs[1:]:
+                ixsAll = ixs[0].union(i)
+
+        out1 = out.reindex(ixsAll).sort_index()
+        out1 = out1.fillna(method='bfill')
+        out1 = out1.fillna(method='ffill')
+        out1 = out1.reset_index()
+        out1 = out1.rename(columns={'index' : 'date'})
+    
+    except:
+        out1 = pdf.copy()
+
+    # Align columns to original data frame
+    # New columns are to the end
+    cols = list(df.columns) + [x for x in out1.columns if x not in df.columns]
+    out1 = out1.loc[:, cols]
+    return(out1)
+
