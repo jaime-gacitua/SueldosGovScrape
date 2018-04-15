@@ -367,22 +367,55 @@ def cleanLatin(df):
                    'INGLÃS' : 'INGLÉS',
                    'Ã­di' : 'ídi',
                    'rãq' : 'ríq',
-                   'Ã­a' : 'ía'
+                   'Ã­a' : 'ía',
+                   "^b'" : '',
+                   "'$" : '',
+                   '\\' : ''
                    }
 
     for col in tqdm_notebook(df.columns):
-        try:
-        
-            df.loc[:,col] = df[col].str.replace("^b'", '')
-            df.loc[:,col] = df[col].str.replace("'$", '')
-
+        try:            
             for key,value in replace_dict.items():
-
                     df.loc[:,col] = df[col].str.replace(key, value)
-                    df.loc[:,col] = df[col].str.replace('\\', '')
-    
         except:
                 print('Could not clean column:', col)
+
+
+def flipColumns(df, col1, col2, stringIn2):
+    startShape = df.shape
+
+    # Involved col2 values that will come to col1
+    newCol1s = df.loc[df[col1].str.contains(stringIn2), col2].value_counts()
+    
+    a = df.loc[df[col1].str.contains(stringIn2)].shape
+    b = round((a[0] / df.shape[0])*100,1)
+    
+    print('{:,} rows of data with flipped {} and {} ({}%)'.format(a[0], col1, col2, b))
+    print('Involved {}:'.format(col1,))
+    print(newCol1s)
+
+    df[col1].fillna('-1', inplace=True)
+    df[col2].fillna('-1', inplace=True)
+
+    df['aux{}'.format(col1)] = [b if stringIn2 in a else a for (a,b) in zip(df[col1], df[col2])]
+    df['aux{}'.format(col2)] = [a if stringIn2 in a else b for (a,b) in zip(df[col1], df[col2])]
+
+    df[col1] = df['aux{}'.format(col1)]
+    df[col2] = df['aux{}'.format(col2)]
+
+#    del df['aux{}'.format(col1)]
+#    del df['aux{}'.format(col2)]
+    
+    # Measure results
+    a = df.loc[df[col1].str.contains(stringIn2)].shape
+    b = round((a[0] / df.shape[0])*100,1)
+    print('{:,} rows of data with flipped {} and {} ({}%)'.format(a[0], col1, col2, b))
+    endShape = df.shape
+    if startShape[0] != endShape[0]:
+        print('WARNING DATA SIZE CHANGED')
+        print(startShape)
+        print(endShape)
+
 
 def pd_preprocess(df):
     #Format
