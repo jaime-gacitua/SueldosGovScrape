@@ -44,7 +44,9 @@ def listUrlsNames(browser, url, searchStr):
 
     return(urls, names)
 
-def getGovernmentData(output_file, url, browser, num, period):
+def getGovernmentData(output_file, url, browser, period, 
+                      cont=['per_planta', 'per_contrata'],
+                      start=0, end=999):
     """
     Gets all the entities within the government data
     Then dives into each of them to get the data
@@ -61,13 +63,14 @@ def getGovernmentData(output_file, url, browser, num, period):
     for i, (t, e) in enumerate(zip(ent_names, ent_urls)):
         print('{}.- {}: {}'.format(i, t, e))
 
+
     # Call next level of search
-    for entity, url in zip(ent_names[num:], ent_urls[num:]):
+    for entity, url in zip(ent_names[start:end], ent_urls[start:end]):
         print(entity)
-        getEntityData(output_file, entity, url, browser, period)
+        getEntityData(output_file, entity, url, browser, period, cont)
 
 
-def getEntityData(output_file, entity, url, browser, period):
+def getEntityData(output_file, entity, url, browser, period, cont):
     """
     Within an entity there are several departments
 
@@ -82,9 +85,9 @@ def getEntityData(output_file, entity, url, browser, period):
     # Call next level of search
     for dept,url in zip(dep_names, dep_urls):
         print(dept)
-        getDepartmentData(output_file, entity, dept, url, browser, period)
+        getDepartmentData(output_file, entity, dept, url, browser, period, cont)
 
-def getDepartmentData(output_file, entity, dept, url, browser, period):
+def getDepartmentData(output_file, entity, dept, url, browser, period, cont):
     """
     For each department we must get both types of personnel
     planta, contrata
@@ -93,7 +96,7 @@ def getDepartmentData(output_file, entity, dept, url, browser, period):
 
     """
 
-    type_contract = ['per_planta', 'per_contrata']
+    type_contract = cont
     url_list = []
     contracts = []
     years = []
@@ -248,7 +251,7 @@ def getTableData2(output_file, entity, dept, contract, year, month, url, browser
         breadcrumb_items = table_location_data.find_elements_by_tag_name("li")
         num_breadcrumbs = len(breadcrumb_items)
 
-        entity = breadcrumb_items[1].texts
+        entity = breadcrumb_items[1].text
         department = breadcrumb_items[2].text
         type_contract = breadcrumb_items[3].text
         year = breadcrumb_items[4].text
@@ -291,6 +294,7 @@ def getTableData2(output_file, entity, dept, contract, year, month, url, browser
                     text = ''
                 else:
                     text = text.pop()
+                    text = text.replace('\n', '')
                 row_list.append(text)
 
             row_list.append(url)
@@ -403,8 +407,8 @@ def flipColumns(df, col1, col2, stringIn2):
     df[col1] = df['aux{}'.format(col1)]
     df[col2] = df['aux{}'.format(col2)]
 
-#    del df['aux{}'.format(col1)]
-#    del df['aux{}'.format(col2)]
+    del df['aux{}'.format(col1)]
+    del df['aux{}'.format(col2)]
     
     # Measure results
     a = df.loc[df[col1].str.contains(stringIn2)].shape
@@ -489,35 +493,37 @@ def pd_monthallyear(df, colCount, col):
 
 
 def createSalaryTimeline(df, p, cols):
-    #scope = df['person'] == p
     
-    col1 = [x for x in cols if 'url' not in x]
-    
-    pdf = df.loc[df['person']== p].drop_duplicates(col1)
-    
+    pdf = df.loc[df['personcat']== p]
     #display(pdf)
     
     # Allyear values
-    auxYears = pdf.loc[pdf['month'] == 'allyear'].drop_duplicates('datets').set_index('datets').resample('MS').ffill().reset_index()
-    
+    auxYears = pdf.loc[pdf['month'] == 'allyear']
+    auxYears = auxYears.set_index('datets')
+    auxYears = auxYears.resample('MS').ffill().reset_index()
 
     # Not Allyear Values
     auxRest = pdf.loc[pdf['month'] != 'allyear']
 
     out = pd.concat([auxYears, auxRest])
-    out = out.loc[:,cols]
     out = out.set_index('datets')
 
     # Create list of all indexes
     ixs = []
-    for index,row in pdf.loc[pd.notnull(pdf['start1'] - pdf['end1'])].iterrows():
+
+    date_ranges = pdf.loc[pd.notnull(pdf['start1'] - pdf['end1']),
+                          ['start1', 'end1']].drop_duplicates()
+    for index,row in date_ranges.iterrows():
         ix = pd.DatetimeIndex(start=row['start1'], end=row['end1'], freq='MS')
         ixs.append(ix)
     
     # If all are none, assume working until end of government
     if len(ixs) == 0:
         pdf['end1'] = datetime(2018,3,31)
-        for index,row in pdf.loc[pd.notnull(pdf['start1'] - pdf['end1'])].iterrows():
+        date_ranges = pdf.loc[pd.notnull(pdf['start1'] - pdf['end1']),
+                              ['start1', 'end1']].drop_duplicates()
+
+        for index,row in date_ranges.iterrows():
             ix = pd.DatetimeIndex(start=row['start1'], end=row['end1'], freq='MS')
             ixs.append(ix)
 
@@ -541,7 +547,7 @@ def createSalaryTimeline(df, p, cols):
 
     # Align columns to original data frame
     # New columns are to the end
-    cols = list(df.columns) + [x for x in out1.columns if x not in df.columns]
+    cols = list(df.columns) + [x for x in out1.columns if x not in list(df.columns)]
     out1 = out1.loc[:, cols]
     return(out1)
 
