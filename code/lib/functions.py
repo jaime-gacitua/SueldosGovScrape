@@ -134,11 +134,11 @@ def getYearData(output_file, entity, dept, contract, year, url, browser, period)
     try:
 	    browser.get(url)
     except TimeoutException:
-    	print('Timeout Exception')
-    	traceback.print_exc()
-    	g = open('./output/log_error.csv', 'a')
-    	g.write(url + ',' + 'Timeout' + "\n");
-    	g.close()
+        print('Timeout Exception')
+        traceback.print_exc()
+        g = open('./output/log_error.csv', 'a')
+        g.write(url + ',' + 'Timeout' + "\n");
+        g.close()
 
 
     monthsdata = False
@@ -506,7 +506,7 @@ def createSalaryTimeline(df, p, cols):
     auxRest = pdf.loc[pdf['month'] != 'allyear']
 
     out = pd.concat([auxYears, auxRest])
-    out = out.set_index('datets')
+    out = out.set_index('datets', drop=False)
 
     # Create list of all indexes
     ixs = []
@@ -551,3 +551,5 @@ def createSalaryTimeline(df, p, cols):
     out1 = out1.loc[:, cols]
     return(out1)
 
+
+fixpeople = {'sandra jaqueline millar concha' : 'thousands'}
