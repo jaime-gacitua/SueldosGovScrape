@@ -23,6 +23,12 @@ from datetime import datetime
 import locale
 locale.setlocale(locale.LC_ALL, 'es_ES')
 
+from plotly import __version__
+from plotly import tools
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import plotly.offline as offline
+import plotly.graph_objs as go
+
 
 def listUrlsNames(browser, url, searchStr):
     """
@@ -553,3 +559,102 @@ def createSalaryTimeline(df, p, cols):
 
 
 fixpeople = {'sandra jaqueline millar concha' : 'thousands'}
+
+
+def plotPeople(df, dateCol='date', amountCol='salary1', highlight=[], titleAdd=''):
+
+	trace1 = go.Scatter(x=df[dateCol],
+						y=df[amountCol],
+						text=df['person'],
+						mode='markers',
+						name='Funcionarios')
+
+	add = []
+	if len(highlight) > 0:
+		for h in highlight:
+			aux = df.loc[df['person'].str.contains(h)]
+			traceaux = go.Scatter(x=aux[dateCol],
+						y=aux[amountCol],
+						text=aux['person'],
+						mode='line',
+						name=h)
+			add.append(traceaux)
+
+	data = [trace1] + add
+
+	layout = go.Layout(title='Salary by Person and Year {}'.format(titleAdd), 
+					   yaxis=dict(title='Salary'), 
+					   xaxis=dict(title='Year'))
+
+	fig = dict(data=data, layout=layout)
+	iplot(fig, filename='styled-scatter')
+
+
+def plotPeopleBox(df, dateCol='date', amountCol='salary1'):
+
+	yrs = df[dateCol].unique()
+
+	data = []
+	for y in yrs:
+		dfaux = df.loc[df[dateCol] == y]
+		traceAux = go.Box(y=dfaux[amountCol], 
+						  x=y,
+						  name=str(y)[0:4],
+						  jitter = 0.3,
+						  pointpos = -1.8,
+						  boxpoints = 'all',
+						  marker = dict(color = 'rgb(7,40,89)'),
+						  line = dict(color = 'rgb(7,40,89)')
+						)
+
+		data.append(traceAux)
+
+	layout = go.Layout(title='Salary by Person and Year', 
+					   width=800,
+					   height=600)
+
+	fig = dict(data=data, layout=layout)
+	iplot(fig, filename='styled-scatter')
+
+
+def plotHighStats(df, titleAdd=''):
+
+	cols = df.columns
+	data = []
+	ynames = ['y', 'y2', 'y3']
+	for col, ynam in zip(df.columns, ynames):
+
+		traceaux = go.Scatter(x=df.index, 
+							  y=df[col],
+							  name=col,
+							  yaxis=ynam)
+		data.append(traceaux)
+
+	fig = tools.make_subplots(rows=3, cols=1, specs=[[{}], [{}], [{}]],
+	                          shared_xaxes=True, shared_yaxes=False,
+	                          vertical_spacing=0.1
+	                          )
+
+	count = 1
+	for trace in data:
+		fig.append_trace(trace, count, 1)
+		count = count + 1
+
+	#layout = go.Layout(
+	#		yaxis1=dict(domain=[0, 0.33], title=cols[0]), 
+	#		yaxis2=dict(domain=[0.33, 0.66], title=cols[1]), 
+	#		yaxis3=dict(domain=[0.66, 1]), title=cols[2])
+
+
+	#fig = dict(data=data, layout=layout)
+
+	fig['layout']['yaxis1'].update(title=cols[0], )
+	fig['layout']['yaxis2'].update(title=cols[1], )
+	fig['layout']['yaxis3'].update(title=cols[2], )
+	fig['layout'].update(title='Costo Dotacion por Año {}'.format(titleAdd), 
+						 width=1000,
+						 height=600)
+	
+	iplot(fig, filename='stacked-subplots-shared-xaxes')
+
+
