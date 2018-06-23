@@ -1,9 +1,9 @@
-# Making Chilean Government data Closer to Chileans
+# Narrowing the gap between Chilean Government Data and Chileans
 
-Data is out there, but it is still far from the people. 
-It is scattered in multiple HTML pages.
+Data is out there, but scattered in multiple HTML pages. Impossible to analyze. What is the real value?
 
-Here we explore transforming all the HTML pages into actual data tables, and grasp the impact could it have.
+Here we explore transforming all the HTML pages into actual data tables 
+and grasp the exponential impact it could have.
 
 ## First phase: 
 1. Web scraping salaries data from [Gobierno Transparente](http://www.gobiernotransparentechile.gob.cl/)
@@ -11,5 +11,5 @@ Here we explore transforming all the HTML pages into actual data tables, and gra
 3. Explore and publish relevant insights
 
 ## Second phase:
-1. Scrape the whole transparency site
-2. Create a web service that allows sharing the clean, tabulated data for all to use
+1. Create a data pipeline based on scraping the whole transparency site, with frequent refreshes
+2. Create a web service that allows sharing the clean, tabulated data for public use
