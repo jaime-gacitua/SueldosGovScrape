@@ -29,6 +29,9 @@ from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.offline as offline
 import plotly.graph_objs as go
 
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
+
 
 def listUrlsNames(browser, url, searchStr):
     """
@@ -498,33 +501,45 @@ def pd_monthallyear(df, colCount, col):
     df.loc[pd.isnull(df[colCount]), colCount] = df['aux3']
 
 
-def createSalaryTimeline(df, p, cols):
-    
+def createSalaryTimeline(df, p):
+    """
+    Takes a dataframe and a person
+    Expands person's payment dataframe to monthly salary payments
+
+    """
+
+    # Filter    
     pdf = df.loc[df['personcat']== p]
-    #display(pdf)
-    
-    # Allyear values
+
+    # Expand allyear values to monthly
     auxYears = pdf.loc[pdf['month'] == 'allyear']
     auxYears = auxYears.set_index('datets')
     auxYears = auxYears.resample('MS').ffill().reset_index()
 
-    # Not Allyear Values
+    # Values that are already monthly (not allyear)
     auxRest = pdf.loc[pdf['month'] != 'allyear']
 
+    # Combine them
     out = pd.concat([auxYears, auxRest])
+
+
     out = out.set_index('datets', drop=False)
 
-    # Create list of all indexes
+    # Create index of all months that must be covered
+    # using the start and end fields
+
     ixs = []
 
     date_ranges = pdf.loc[pd.notnull(pdf['start1'] - pdf['end1']),
                           ['start1', 'end1']].drop_duplicates()
+
     for index,row in date_ranges.iterrows():
         ix = pd.DatetimeIndex(start=row['start1'], end=row['end1'], freq='MS')
         ixs.append(ix)
     
     # If all are none, assume working until end of government
     if len(ixs) == 0:
+
         pdf['end1'] = datetime(2018,3,31)
         date_ranges = pdf.loc[pd.notnull(pdf['start1'] - pdf['end1']),
                               ['start1', 'end1']].drop_duplicates()
@@ -536,18 +551,24 @@ def createSalaryTimeline(df, p, cols):
         
     # Create union of all indexes
     try:
+
+        # Cover for the case when there is only one month (index)
         if len(ixs) == 1:
             ixsAll = ixs[0]
         else:
             for i in ixs[1:]:
                 ixsAll = ixs[0].union(i)
 
+        # Reindex and back/forward fill values
         out1 = out.reindex(ixsAll).sort_index()
         out1 = out1.fillna(method='bfill')
         out1 = out1.fillna(method='ffill')
+
+        # Bring back the index of months as a regular column
         out1 = out1.reset_index()
         out1 = out1.rename(columns={'index' : 'date'})
     
+    # If all fails, keep the original person's data frame
     except:
         out1 = pdf.copy()
 
@@ -658,3 +679,88 @@ def plotHighStats(df, titleAdd=''):
 	iplot(fig, filename='stacked-subplots-shared-xaxes')
 
 
+def findBestMatch(item, li, distMatch, text_file):
+    """
+    Finds the best match of item in list
+    Using fuzzy matching
+
+    Match if the fuzzy ratio is above distMatch
+
+    If no element from li matches item, returns item
+
+    Writes a log of matches to text_file
+    """
+
+    minDist = 0
+    sort_ratio = 0
+    set_ratio = 0
+
+    incumbent = item
+
+    for item1 in [x for x in li if x != item]:
+        dist = fuzz.token_set_ratio(item, item1)
+        #print(item, item1, dist)
+
+        if dist > minDist:
+            #print(item, '-->', item1, dist)
+            incumbent = item1
+            minDist = dist 
+            sort_ratio = fuzz.token_sort_ratio(item, item1)
+
+    #print('{}, {}, {}'.format(item, incumbent, minDist))
+
+    # Only match if the distance is lower than threshold
+    # And the incumbent has more letters
+    if minDist >= distMatch and len(incumbent) > len(item):
+        text_file.write('{},{},{},{}\n'.format(item, 
+                                               incumbent,
+                                               minDist, 
+                                               sort_ratio))
+        return(incumbent)
+    # Otherwise match to the same item
+    else:
+        return(item)
+
+
+def measureNormalization(a, b):
+    count = 0
+    for x,y in zip(a,b):
+        if x!=y:
+            #print(x,y)
+            count = count + 1
+    print('Normalized items: {}'.format(count))
+
+def createLookupNormalize(li, distMatch=90, window=10):
+    
+    import sys
+    
+    print('Sorting list...')
+    sys.stdout.flush()
+
+    li.sort()
+    
+    print('Done sorting')
+    sys.stdout.flush()
+
+    currents = []
+    matchTo = []
+    
+    text_file = open('name-fuzzy-match-log.csv', "w")
+    text_file.write('original, switch, distance, token_sort_ratio, token_set_ratio\n')
+
+    counter = 0
+    # For each item in the list find the closest other item
+    for item in tqdm_notebook(li):
+        # Reset stats    		
+        currents.append(item)
+        
+        liCheck = li[counter - window:counter + window]
+        match = findBestMatch(item, liCheck, distMatch, text_file)
+        matchTo.append(match)
+        counter = counter + 1
+    
+    text_file.close()
+
+    measureNormalization(currents, matchTo)
+
+    return(currents, matchTo)
