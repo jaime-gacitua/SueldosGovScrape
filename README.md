@@ -13,3 +13,14 @@ and grasp the exponential impact it could have.
 ## Second phase:
 1. Create a data pipeline based on scraping the whole transparency site, with frequent refreshes
 2. Create a web service that allows sharing the clean, tabulated data for public use
+
+
+
+# Available data
+
+Raw and cleaned data are already available in our [shared folder](https://bit.ly/2KfiwU9)
+
+File Name | Description
+---------|-------------
+scraped_data_20180210-3.csv.zip | Raw data scraped Feb 2, 2018
+presidencia-monthly-transformed_20180210-3-1.csv | Cleaned Data
