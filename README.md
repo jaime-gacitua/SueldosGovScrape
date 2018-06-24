@@ -24,3 +24,7 @@ File Name | Description
 ---------|-------------
 scraped_data_20180210-3.csv.zip | Raw data scraped Feb 2, 2018
 presidencia-monthly-transformed_20180210-3-1.csv | Cleaned Data
+
+# Data transformations
+
+Data is messy and needs massaging. Details of transformations [here](https://github.com/jaime-gacitua/SueldosGovScrape/wiki/Data-Cleanup-and-Transformations)
